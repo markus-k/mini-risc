@@ -1,0 +1,11 @@
+# ghdl stuff
+*.cf
+*.o
+*.ghw
+*.vcd
+/testbench
+
+# emacs crap
+.\#*
+\#*\#
+*~
