@@ -33,9 +33,10 @@ architecture rtl of mem is
 
     ( X"4" & X"1" & X"1" & X"3" ), -- sub r1, r1, r3
     ( X"3" & X"2" & X"2" & X"0" ), -- add r2, r2, r0
-    ( X"B" & X"4" & X"1" & X"0" ), -- jmpnz r4, r1
+    ( X"A" & X"0" & X"1" & X"5" ), -- cmp r1, r5 (0)
+    ( X"B" & X"4" & X"2" & X"0" ), -- jmpne r4
 
-    ( X"9" & X"00C" ), -- jmp .
+    ( X"9" & X"fff" ), -- jmp .
     others => (others => '0') -- nop
     );
 begin

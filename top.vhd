@@ -5,7 +5,20 @@ use ieee.numeric_std.all;
 -- registers:
 -- 16 bit registers 0-f:
 -- 0-c: general purpose
+-- e: flags
 -- f: pc
+--
+-- flags register (ARM style):
+-- -------------------------------------------------------------------
+-- | 15                                                            0 |
+-- -------------------------------------------------------------------
+-- |                                                 | V | C | Z | N |
+-- -------------------------------------------------------------------
+--
+-- N = negative flags, i.e. bit 15 is set
+-- Z = zero flag
+-- C = carry flag
+-- V = signed overflow
 --
 -- instruction with 3 operands:
 -- -------------------------------------------------------------------
@@ -24,6 +37,11 @@ use ieee.numeric_std.all;
 -- | 4 bit opcode | 12 bit immediate                                 |
 -- -------------------------------------------------------------------
 --
+-- instruction with flags
+-- -------------------------------------------------------------------
+-- | 4 bit opcode | 4 bit dest reg | 4 bit cond flags |              |
+-- -------------------------------------------------------------------
+--
 -- opcodes:
 --
 -- 0 mov dst = src1
@@ -38,13 +56,31 @@ use ieee.numeric_std.all;
 -- 7
 -- 8
 --
--- 9 jmpi pc = imm12
--- a jmp pc = dst
--- b jmpnz if src1 != 0 { pc = dst }
+-- 9 jmpri pc += imm12
+-- a cmp src1, src2
+-- b jmpc if (cond met) { pc = dst }
 -- c
 -- d
 -- e
 -- f
+--
+-- condition codes (ARM-style):
+-- 0 always
+-- 1 eq (Z=1)
+-- 2 ne (Z=0)
+-- 3 hs (C=1)
+-- 4 lo (C=0)
+-- 5 mi (N=1)
+-- 6 po (N=0)
+-- 7 vs (V=1)
+-- 8 vc (V=0)
+-- 9 hi (C=1) && (Z=0)
+-- a ls (C=0) || (Z=1)
+-- b ge (N=V)
+-- c lt (N!=V)
+-- d gt (Z=0) && (N=V)
+-- e le (Z=1) || (N!=V)
+-- f reserved
 
 entity top is
   port (
@@ -76,6 +112,7 @@ architecture rtl of top is
 
   constant num_regs : natural := 16;
   constant reg_pc_idx : natural := num_regs - 1;
+  constant reg_flags_idx : natural := num_regs - 2;
   type reg_bank_type is array (0 to num_regs - 1) of std_logic_vector(width_msb downto 0);
   signal reg_bank_ns : reg_bank_type;
   signal reg_bank_cs : reg_bank_type := (others => (others => '0'));
@@ -84,6 +121,8 @@ architecture rtl of top is
   signal instr_fetch_cs : std_logic_vector(width_msb downto 0) := (others => '0');
   signal instr_fsm_ns : instr_fsm_type;
   signal instr_fsm_cs : instr_fsm_type := FETCH;
+
+  signal cond_flags_s : std_logic_vector(width_msb downto 0);
 begin
   ram : mem
     port map(
@@ -95,13 +134,42 @@ begin
       we => ram_we_s,
       addr => ram_addr_s);
 
-  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs) is
+  cond_flags: process (reg_bank_cs) is
+    variable cond_flags_v : std_logic_vector(width_msb downto 0);
+    variable flags_v : std_logic_vector(3 downto 0);
+  begin
+    flags_v := reg_bank_cs(reg_flags_idx)(3 downto 0);
+
+    cond_flags_v := (others => '0');
+    cond_flags_v(0) := '1'; -- always
+    cond_flags_v(1) := flags_v(1); -- eq
+    cond_flags_v(2) := not flags_v(1); -- ne
+    cond_flags_v(3) := flags_v(2); -- hs
+    cond_flags_v(4) := not flags_v(2); -- lo
+    cond_flags_v(5) := flags_v(0); -- mi (negative)
+    cond_flags_v(6) := not flags_v(0); -- positive
+    cond_flags_v(7) := flags_v(3); -- vs
+    cond_flags_v(8) := not flags_v(3); -- vc
+    cond_flags_v(9) := flags_v(2) and not flags_v(0); -- hi
+    cond_flags_v(10) := not flags_v(2) or flags_v(0); -- ls
+    cond_flags_v(11) := (flags_v(1) and flags_v(3)) or (not flags_v(1) and not flags_v(3)); -- ge
+    cond_flags_v(12) := (flags_v(1) and not flags_v(3)) or (not flags_v(1) and flags_v(3));
+    cond_flags_v(13) := not flags_v(0) and ((flags_v(1) and flags_v(3)) or (not flags_v(1) and not flags_v(3)));
+    cond_flags_v(14) := flags_v(0) or ((flags_v(1) and not flags_v(3)) or (not flags_v(1) and flags_v(3))); --
+    cond_flags_v(15) := '0'; -- reserved
+
+    cond_flags_s <= cond_flags_v;
+  end process;
+
+  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs, cond_flags_s) is
     variable opcode_v : std_logic_vector(3 downto 0);
     variable dst_reg_v : integer range 0 to 15;
     variable src1_reg_v : integer range 0 to 15;
     variable src2_reg_v : integer range 0 to 15;
     variable imm8_v : std_logic_vector(7 downto 0);
     variable imm12_v : std_logic_vector(11 downto 0);
+    variable sub_v : std_logic_vector(width_msb+1 downto 0);
+    variable flags_v : std_logic_vector(3 downto 0);
 
     variable reg_bank_v : reg_bank_type;
   begin
@@ -111,6 +179,10 @@ begin
     src2_reg_v := to_integer(unsigned(instr_fetch_cs(3 downto 0)));
     imm8_v := instr_fetch_cs(7 downto 0); -- 8 bit immediate
     imm12_v := instr_fetch_cs(11 downto 0); -- 8 bit immediate
+
+    flags_v := reg_bank_v(reg_flags_idx)(3 downto 0);
+
+    sub_v := (others => '0');
 
     reg_bank_v := reg_bank_cs;
 
@@ -139,19 +211,34 @@ begin
             to_integer(unsigned(reg_bank_v(src1_reg_v))) - to_integer(unsigned(reg_bank_v(src2_reg_v))),
             16));
         when X"9" =>
-          -- load 12 bit immediate pc
-          reg_bank_v(reg_pc_idx) := "0000" & imm12_v;
+          -- load 12 bit relative immediate pc
+          reg_bank_v(reg_pc_idx) := std_logic_vector(to_unsigned(
+            to_integer(unsigned(reg_bank_v(reg_pc_idx))) + to_integer(signed(imm12_v)),
+            16));
         when X"A" =>
-          -- load pc from dst reg
-          reg_bank_v(reg_pc_idx) := reg_bank_v(dst_reg_v);
+          -- compare src1 and src2 and set flags
+          sub_v := std_logic_vector(to_signed(
+            to_integer(signed(reg_bank_v(src1_reg_v))) - to_integer(signed(reg_bank_v(src2_reg_v))),
+            17));
+
+          -- update flags
+          flags_v := "0000";
+          flags_v(0) := sub_v(15);
+          if sub_v = "00000000000000000" then
+            flags_v(1) := '1';
+          end if;
+          flags_v(2) := sub_v(16);
+          flags_v(3) := '0'; -- TODO
         when X"B" =>
           -- load pc from dst reg if src1 != 0
-          if not (reg_bank_v(src1_reg_v) = X"0000") then
+          if cond_flags_s(src1_reg_v) = '1' then
             reg_bank_v(reg_pc_idx) := reg_bank_v(dst_reg_v);
           end if;
         when others =>
           null;
       end case;
+
+      reg_bank_v(reg_flags_idx)(3 downto 0) := flags_v;
     end if;
 
     reg_bank_ns <= reg_bank_v;
