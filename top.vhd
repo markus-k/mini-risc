@@ -92,23 +92,40 @@ architecture rtl of top is
   constant bit_width : natural := 16;
   constant width_msb : natural := bit_width - 1;
 
-  component mem is
+  component rom is
       port (
         clk  : in  std_logic;
         nres : in  std_logic;
 
-        di   : in  std_logic_vector(15 downto 0);
         do   : out std_logic_vector(15 downto 0);
-        we   : in  std_logic;
         addr : in  std_logic_vector(15 downto 0));
-  end component mem;
+  end component rom;
+  for all : rom use entity work.rom(rtl);
 
-  type instr_fsm_type is (FETCH, DECODE, EXECUTE);
+  component ram is
+    generic (
+      ram_size : natural := 64);
+
+    port (
+      clk  : in  std_logic;
+      nres : in  std_logic;
+
+      di   : in  std_logic_vector(15 downto 0);
+      do   : out std_logic_vector(15 downto 0);
+      we   : in  std_logic;
+      addr : in  std_logic_vector(15 downto 0));
+  end component ram;
+  for all : ram use entity work.ram(rtl);
+
+  signal rom_do_s : std_logic_vector(15 downto 0);
+  signal rom_addr_s : std_logic_vector(15 downto 0);
 
   signal ram_di_s : std_logic_vector(15 downto 0);
   signal ram_do_s : std_logic_vector(15 downto 0);
   signal ram_we_s : std_logic;
   signal ram_addr_s : std_logic_vector(15 downto 0);
+
+  type instr_fsm_type is (FETCH, DECODE, EXECUTE);
 
   constant num_regs : natural := 16;
   constant reg_pc_idx : natural := num_regs - 1;
@@ -124,7 +141,17 @@ architecture rtl of top is
 
   signal cond_flags_s : std_logic_vector(width_msb downto 0);
 begin
-  ram : mem
+  progrom : rom
+    port map(
+      clk => clk,
+      nres => nres,
+
+      do => rom_do_s,
+      addr => rom_addr_s);
+
+  appram : ram
+    generic map(
+      ram_size => 256)
     port map(
       clk => clk,
       nres => nres,
@@ -252,13 +279,13 @@ begin
     instr_fetch_v := instr_fetch_cs;
 
     -- ram addr is always pc for now
-    ram_addr_s <= reg_bank_cs(reg_pc_idx);
+    rom_addr_s <= reg_bank_cs(reg_pc_idx);
 
     case instr_fsm_v is
       when FETCH =>
         instr_fsm_v := DECODE;
       when DECODE =>
-        instr_fetch_v := ram_do_s;
+        instr_fetch_v := rom_do_s;
         instr_fsm_v := EXECUTE;
       when EXECUTE =>
         instr_fsm_v := FETCH;

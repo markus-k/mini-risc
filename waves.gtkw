@@ -1,21 +1,21 @@
 [*]
 [*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
-[*] Sun Apr 21 14:43:16 2019
+[*] Mon Apr 22 08:34:15 2019
 [*]
 [dumpfile] "/home/markus/Nextcloud/Developer/mini_cpu/waves.ghw"
-[dumpfile_mtime] "Sun Apr 21 14:40:21 2019"
-[dumpfile_size] 10413
+[dumpfile_mtime] "Sun Apr 21 21:34:25 2019"
+[dumpfile_size] 4186080
 [savefile] "/home/markus/Nextcloud/Developer/mini_cpu/waves.gtkw"
-[timestart] 0
+[timestart] 13000000
 [size] 1972 992
 [pos] -1 -1
-*-27.470572 1419000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.470572 1988000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.testbench.
 [treeopen] top.testbench.dut.
 [treeopen] top.testbench.dut.reg_bank_cs.
 [sst_width] 222
-[signals_width] 267
+[signals_width] 327
 [sst_expanded] 1
 [sst_vpaned_height] 349
 @28
@@ -26,7 +26,27 @@ top.testbench.dut.instr_fsm_cs
 @22
 +{pc} #{top.testbench.dut.reg_bank_cs[15][15:0]} top.testbench.dut.reg_bank_cs[15][15] top.testbench.dut.reg_bank_cs[15][14] top.testbench.dut.reg_bank_cs[15][13] top.testbench.dut.reg_bank_cs[15][12] top.testbench.dut.reg_bank_cs[15][11] top.testbench.dut.reg_bank_cs[15][10] top.testbench.dut.reg_bank_cs[15][9] top.testbench.dut.reg_bank_cs[15][8] top.testbench.dut.reg_bank_cs[15][7] top.testbench.dut.reg_bank_cs[15][6] top.testbench.dut.reg_bank_cs[15][5] top.testbench.dut.reg_bank_cs[15][4] top.testbench.dut.reg_bank_cs[15][3] top.testbench.dut.reg_bank_cs[15][2] top.testbench.dut.reg_bank_cs[15][1] top.testbench.dut.reg_bank_cs[15][0]
 #{top.testbench.dut.instr_fetch_cs[15:0]} top.testbench.dut.instr_fetch_cs[15] top.testbench.dut.instr_fetch_cs[14] top.testbench.dut.instr_fetch_cs[13] top.testbench.dut.instr_fetch_cs[12] top.testbench.dut.instr_fetch_cs[11] top.testbench.dut.instr_fetch_cs[10] top.testbench.dut.instr_fetch_cs[9] top.testbench.dut.instr_fetch_cs[8] top.testbench.dut.instr_fetch_cs[7] top.testbench.dut.instr_fetch_cs[6] top.testbench.dut.instr_fetch_cs[5] top.testbench.dut.instr_fetch_cs[4] top.testbench.dut.instr_fetch_cs[3] top.testbench.dut.instr_fetch_cs[2] top.testbench.dut.instr_fetch_cs[1] top.testbench.dut.instr_fetch_cs[0]
+@c00029
 +{flags} #{top.testbench.dut.reg_bank_cs[14][15:0]} top.testbench.dut.reg_bank_cs[14][15] top.testbench.dut.reg_bank_cs[14][14] top.testbench.dut.reg_bank_cs[14][13] top.testbench.dut.reg_bank_cs[14][12] top.testbench.dut.reg_bank_cs[14][11] top.testbench.dut.reg_bank_cs[14][10] top.testbench.dut.reg_bank_cs[14][9] top.testbench.dut.reg_bank_cs[14][8] top.testbench.dut.reg_bank_cs[14][7] top.testbench.dut.reg_bank_cs[14][6] top.testbench.dut.reg_bank_cs[14][5] top.testbench.dut.reg_bank_cs[14][4] top.testbench.dut.reg_bank_cs[14][3] top.testbench.dut.reg_bank_cs[14][2] top.testbench.dut.reg_bank_cs[14][1] top.testbench.dut.reg_bank_cs[14][0]
+@28
+top.testbench.dut.reg_bank_cs[14][15]
+top.testbench.dut.reg_bank_cs[14][14]
+top.testbench.dut.reg_bank_cs[14][13]
+top.testbench.dut.reg_bank_cs[14][12]
+top.testbench.dut.reg_bank_cs[14][11]
+top.testbench.dut.reg_bank_cs[14][10]
+top.testbench.dut.reg_bank_cs[14][9]
+top.testbench.dut.reg_bank_cs[14][8]
+top.testbench.dut.reg_bank_cs[14][7]
+top.testbench.dut.reg_bank_cs[14][6]
+top.testbench.dut.reg_bank_cs[14][5]
+top.testbench.dut.reg_bank_cs[14][4]
+top.testbench.dut.reg_bank_cs[14][3]
+top.testbench.dut.reg_bank_cs[14][2]
+top.testbench.dut.reg_bank_cs[14][1]
+top.testbench.dut.reg_bank_cs[14][0]
+@1401209
+-group_end
 @28
 +{cond_flags} #{top.testbench.dut.cond_flags_s[15:0]} top.testbench.dut.cond_flags_s[15] top.testbench.dut.cond_flags_s[14] top.testbench.dut.cond_flags_s[13] top.testbench.dut.cond_flags_s[12] top.testbench.dut.cond_flags_s[11] top.testbench.dut.cond_flags_s[10] top.testbench.dut.cond_flags_s[9] top.testbench.dut.cond_flags_s[8] top.testbench.dut.cond_flags_s[7] top.testbench.dut.cond_flags_s[6] top.testbench.dut.cond_flags_s[5] top.testbench.dut.cond_flags_s[4] top.testbench.dut.cond_flags_s[3] top.testbench.dut.cond_flags_s[2] top.testbench.dut.cond_flags_s[1] top.testbench.dut.cond_flags_s[0]
 @22
@@ -57,7 +77,7 @@ top.testbench.dut.reg_bank_cs[1][0]
 +{r3} #{top.testbench.dut.reg_bank_cs[3][15:0]} top.testbench.dut.reg_bank_cs[3][15] top.testbench.dut.reg_bank_cs[3][14] top.testbench.dut.reg_bank_cs[3][13] top.testbench.dut.reg_bank_cs[3][12] top.testbench.dut.reg_bank_cs[3][11] top.testbench.dut.reg_bank_cs[3][10] top.testbench.dut.reg_bank_cs[3][9] top.testbench.dut.reg_bank_cs[3][8] top.testbench.dut.reg_bank_cs[3][7] top.testbench.dut.reg_bank_cs[3][6] top.testbench.dut.reg_bank_cs[3][5] top.testbench.dut.reg_bank_cs[3][4] top.testbench.dut.reg_bank_cs[3][3] top.testbench.dut.reg_bank_cs[3][2] top.testbench.dut.reg_bank_cs[3][1] top.testbench.dut.reg_bank_cs[3][0]
 +{r4} #{top.testbench.dut.reg_bank_cs[4][15:0]} top.testbench.dut.reg_bank_cs[4][15] top.testbench.dut.reg_bank_cs[4][14] top.testbench.dut.reg_bank_cs[4][13] top.testbench.dut.reg_bank_cs[4][12] top.testbench.dut.reg_bank_cs[4][11] top.testbench.dut.reg_bank_cs[4][10] top.testbench.dut.reg_bank_cs[4][9] top.testbench.dut.reg_bank_cs[4][8] top.testbench.dut.reg_bank_cs[4][7] top.testbench.dut.reg_bank_cs[4][6] top.testbench.dut.reg_bank_cs[4][5] top.testbench.dut.reg_bank_cs[4][4] top.testbench.dut.reg_bank_cs[4][3] top.testbench.dut.reg_bank_cs[4][2] top.testbench.dut.reg_bank_cs[4][1] top.testbench.dut.reg_bank_cs[4][0]
 +{r5} #{top.testbench.dut.reg_bank_cs[5][15:0]} top.testbench.dut.reg_bank_cs[5][15] top.testbench.dut.reg_bank_cs[5][14] top.testbench.dut.reg_bank_cs[5][13] top.testbench.dut.reg_bank_cs[5][12] top.testbench.dut.reg_bank_cs[5][11] top.testbench.dut.reg_bank_cs[5][10] top.testbench.dut.reg_bank_cs[5][9] top.testbench.dut.reg_bank_cs[5][8] top.testbench.dut.reg_bank_cs[5][7] top.testbench.dut.reg_bank_cs[5][6] top.testbench.dut.reg_bank_cs[5][5] top.testbench.dut.reg_bank_cs[5][4] top.testbench.dut.reg_bank_cs[5][3] top.testbench.dut.reg_bank_cs[5][2] top.testbench.dut.reg_bank_cs[5][1] top.testbench.dut.reg_bank_cs[5][0]
-#{top.testbench.dut.ram_do_s[15:0]} top.testbench.dut.ram_do_s[15] top.testbench.dut.ram_do_s[14] top.testbench.dut.ram_do_s[13] top.testbench.dut.ram_do_s[12] top.testbench.dut.ram_do_s[11] top.testbench.dut.ram_do_s[10] top.testbench.dut.ram_do_s[9] top.testbench.dut.ram_do_s[8] top.testbench.dut.ram_do_s[7] top.testbench.dut.ram_do_s[6] top.testbench.dut.ram_do_s[5] top.testbench.dut.ram_do_s[4] top.testbench.dut.ram_do_s[3] top.testbench.dut.ram_do_s[2] top.testbench.dut.ram_do_s[1] top.testbench.dut.ram_do_s[0]
-#{top.testbench.dut.ram_addr_s[15:0]} top.testbench.dut.ram_addr_s[15] top.testbench.dut.ram_addr_s[14] top.testbench.dut.ram_addr_s[13] top.testbench.dut.ram_addr_s[12] top.testbench.dut.ram_addr_s[11] top.testbench.dut.ram_addr_s[10] top.testbench.dut.ram_addr_s[9] top.testbench.dut.ram_addr_s[8] top.testbench.dut.ram_addr_s[7] top.testbench.dut.ram_addr_s[6] top.testbench.dut.ram_addr_s[5] top.testbench.dut.ram_addr_s[4] top.testbench.dut.ram_addr_s[3] top.testbench.dut.ram_addr_s[2] top.testbench.dut.ram_addr_s[1] top.testbench.dut.ram_addr_s[0]
+#{top.testbench.dut.rom_addr_s[15:0]} top.testbench.dut.rom_addr_s[15] top.testbench.dut.rom_addr_s[14] top.testbench.dut.rom_addr_s[13] top.testbench.dut.rom_addr_s[12] top.testbench.dut.rom_addr_s[11] top.testbench.dut.rom_addr_s[10] top.testbench.dut.rom_addr_s[9] top.testbench.dut.rom_addr_s[8] top.testbench.dut.rom_addr_s[7] top.testbench.dut.rom_addr_s[6] top.testbench.dut.rom_addr_s[5] top.testbench.dut.rom_addr_s[4] top.testbench.dut.rom_addr_s[3] top.testbench.dut.rom_addr_s[2] top.testbench.dut.rom_addr_s[1] top.testbench.dut.rom_addr_s[0]
+#{top.testbench.dut.rom_do_s[15:0]} top.testbench.dut.rom_do_s[15] top.testbench.dut.rom_do_s[14] top.testbench.dut.rom_do_s[13] top.testbench.dut.rom_do_s[12] top.testbench.dut.rom_do_s[11] top.testbench.dut.rom_do_s[10] top.testbench.dut.rom_do_s[9] top.testbench.dut.rom_do_s[8] top.testbench.dut.rom_do_s[7] top.testbench.dut.rom_do_s[6] top.testbench.dut.rom_do_s[5] top.testbench.dut.rom_do_s[4] top.testbench.dut.rom_do_s[3] top.testbench.dut.rom_do_s[2] top.testbench.dut.rom_do_s[1] top.testbench.dut.rom_do_s[0]
 [pattern_trace] 1
 [pattern_trace] 0
