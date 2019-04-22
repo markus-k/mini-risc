@@ -134,11 +134,12 @@ architecture rtl of top is
   signal ram_we_s : std_logic;
   signal ram_addr_s : std_logic_vector(15 downto 0);
 
-  type instr_fsm_type is (FETCH, DECODE, EXECUTE);
+  type instr_fsm_type is (FETCH, DECODE, EXECUTE, MEMACCESS);
 
   constant num_regs : natural := 16;
   constant reg_pc_idx : natural := num_regs - 1;
   constant reg_flags_idx : natural := num_regs - 2;
+  constant reg_sp_idx : natural := num_regs - 3;
   type reg_bank_type is array (0 to num_regs - 1) of std_logic_vector(width_msb downto 0);
   signal reg_bank_ns : reg_bank_type;
   signal reg_bank_cs : reg_bank_type := (others => (others => '0'));
@@ -147,6 +148,13 @@ architecture rtl of top is
   signal instr_fetch_cs : std_logic_vector(width_msb downto 0) := (others => '0');
   signal instr_fsm_ns : instr_fsm_type;
   signal instr_fsm_cs : instr_fsm_type := FETCH;
+
+  signal ram_di_ns : std_logic_vector(15 downto 0);
+  signal ram_di_cs : std_logic_vector(15 downto 0) := (others => '0');
+  signal ram_we_ns : std_logic;
+  signal ram_we_cs : std_logic := '0';
+  signal ram_addr_ns : std_logic_vector(15 downto 0);
+  signal ram_addr_cs : std_logic_vector(15 downto 0) := (others => '0');
 
   signal cond_flags_s : std_logic_vector(width_msb downto 0);
 begin
@@ -197,7 +205,7 @@ begin
     cond_flags_s <= cond_flags_v;
   end process;
 
-  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs, cond_flags_s) is
+  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs, cond_flags_s, ram_di_cs, ram_do_s, ram_we_cs, ram_addr_cs) is
     variable opcode_v : std_logic_vector(3 downto 0);
     variable dst_reg_v : integer range 0 to 15;
     variable src1_reg_v : integer range 0 to 15;
@@ -209,6 +217,9 @@ begin
     variable flags_v : std_logic_vector(3 downto 0);
 
     variable reg_bank_v : reg_bank_type;
+    variable ram_di_v : std_logic_vector(15 downto 0);
+    variable ram_we_v : std_logic;
+    variable ram_addr_v : std_logic_vector(15 downto 0);
   begin
     opcode_v := instr_fetch_cs(15 downto 12);
     dst_reg_v := to_integer(unsigned(instr_fetch_cs(11 downto 8)));
@@ -223,6 +234,9 @@ begin
     sub_v := (others => '0');
 
     reg_bank_v := reg_bank_cs;
+    ram_di_v := ram_di_cs;
+    ram_we_v := ram_we_cs;
+    ram_addr_v := ram_addr_cs;
 
     if instr_fsm_cs = EXECUTE then
       -- increment pc
@@ -289,21 +303,57 @@ begin
             reg_bank_v(reg_pc_idx) := reg_bank_v(dst_reg_v);
           end if;
         when X"C" =>
-          null;
+          -- load from memory
+          ram_addr_v := reg_bank_v(src1_reg_v);
+          ram_we_v := '0';
         when X"D" =>
-          null;
+          -- store in memory
+          ram_addr_v := reg_bank_v(dst_reg_v);
+          ram_di_v := reg_bank_v(src1_reg_v);
+          ram_we_v := '1';
         when X"E" =>
-          null;
+          -- push to stack, sp post decrement
+          ram_addr_v := reg_bank_v(reg_sp_idx);
+          ram_di_v := reg_bank_v(dst_reg_v);
+          ram_we_v := '1';
         when X"F" =>
-          null;
+          -- pop from stack, pre increment
+          reg_bank_v(reg_sp_idx) := std_logic_vector(to_unsigned(
+            to_integer(unsigned(reg_bank_v(reg_sp_idx))) + 2,
+            16));
+          ram_addr_v := reg_bank_v(reg_sp_idx);
+          ram_we_v := '0';
         when others =>
           null;
       end case;
 
       reg_bank_v(reg_flags_idx)(3 downto 0) := flags_v;
+    elsif instr_fsm_cs = MEMACCESS then
+      case opcode_v is
+        when X"C" =>
+          -- load
+          reg_bank_v(dst_reg_v) := ram_do_s;
+        when X"D" =>
+          -- store
+          ram_we_v := '0';
+        when X"E" =>
+          -- push
+          ram_we_v := '0';
+          reg_bank_v(reg_sp_idx) := std_logic_vector(to_unsigned(
+            to_integer(unsigned(reg_bank_v(reg_sp_idx))) - 2,
+            16));
+        when X"F" =>
+          -- pop
+          reg_bank_v(dst_reg_v) := ram_do_s;
+        when others =>
+          null; -- nothing to be done for non-memory instructions
+      end case;
     end if;
 
     reg_bank_ns <= reg_bank_v;
+    ram_di_ns <= ram_di_v;
+    ram_we_ns <= ram_we_v;
+    ram_addr_ns <= ram_addr_v;
   end process;
 
   process (reg_bank_cs, instr_fsm_cs, instr_fetch_cs) is
@@ -313,7 +363,7 @@ begin
     instr_fsm_v := instr_fsm_cs;
     instr_fetch_v := instr_fetch_cs;
 
-    -- ram addr is always pc for now
+    -- rom addr is always pc for now
     rom_addr_s <= reg_bank_cs(reg_pc_idx);
 
     case instr_fsm_v is
@@ -323,6 +373,8 @@ begin
         instr_fetch_v := rom_do_s;
         instr_fsm_v := EXECUTE;
       when EXECUTE =>
+        instr_fsm_v := MEMACCESS;
+      when MEMACCESS =>
         instr_fsm_v := FETCH;
     end case;
 
@@ -337,11 +389,23 @@ begin
         reg_bank_cs <= (others => (others => '0'));
         instr_fetch_cs <= (others => '0');
         instr_fsm_cs <= FETCH;
+
+        ram_di_cs <= (others => '0');
+        ram_we_cs <= '0';
+        ram_addr_cs <= (others => '0');
       else
         reg_bank_cs <= reg_bank_ns;
         instr_fetch_cs <= instr_fetch_ns;
         instr_fsm_cs <= instr_fsm_ns;
+
+        ram_di_cs <= ram_di_ns;
+        ram_we_cs <= ram_we_ns;
+        ram_addr_cs <= ram_addr_ns;
       end if;
     end if;
   end process;
+
+  ram_addr_s <= ram_addr_cs;
+  ram_di_s <= ram_di_cs;
+  ram_we_s <= ram_we_cs;
 end architecture rtl;

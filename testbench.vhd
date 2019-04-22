@@ -41,7 +41,7 @@ begin  -- architecture bhv
   process is
   begin
     simulation_done <= false;
-    wait for clkFullPeriod * 128;
+    wait for clkFullPeriod * 256;
     simulation_done <= true;
     wait;
   end process;
