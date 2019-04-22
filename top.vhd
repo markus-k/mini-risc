@@ -5,8 +5,9 @@ use ieee.numeric_std.all;
 -- registers:
 -- 16 bit registers 0-f:
 -- 0-c: general purpose
+-- d: stack pointer sp
 -- e: flags
--- f: pc
+-- f: program counter pc
 --
 -- flags register (ARM style):
 -- -------------------------------------------------------------------
@@ -32,12 +33,19 @@ use ieee.numeric_std.all;
 -- | 4 bit opcode | 4 bit dest reg | 8 bit immediate                 |
 -- -------------------------------------------------------------------
 --
+-- instruction with 2 operands and 4 bit immediate:
+-- -------------------------------------------------------------------
+-- | 15                                                            0 |
+-- -------------------------------------------------------------------
+-- | 4 bit opcode | 4 bit dest reg | 4 bit src1 reg | 4 bit immd.    |
+-- -------------------------------------------------------------------
+--
 -- instruction with 12 bit immediate
 -- -------------------------------------------------------------------
 -- | 4 bit opcode | 12 bit immediate                                 |
 -- -------------------------------------------------------------------
 --
--- instruction with flags
+-- instruction with cond flags
 -- -------------------------------------------------------------------
 -- | 4 bit opcode | 4 bit dest reg | 4 bit cond flags |              |
 -- -------------------------------------------------------------------
@@ -51,18 +59,19 @@ use ieee.numeric_std.all;
 -- 3 add dst = src1 + src2
 -- 4 sub dst = src1 - src2
 --
--- 5
--- 6
--- 7
--- 8
+-- 5 and dst = src1 and src2
+-- 6 or dst = src1 or src2
+-- 7 xor dst = src1 xor src2
+-- 8 sht if (imm4[3]) { dst = src1 >> imm4[2:0] } else { dst = src1 << imm4[2:0] }
 --
 -- 9 jmpri pc += imm12
 -- a cmp src1, src2
 -- b jmpc if (cond met) { pc = dst }
--- c
--- d
--- e
--- f
+--
+-- c ldr dst = ram[src1]
+-- d str ram[src1] = dst
+-- e push ram[sp] = dst; sp--
+-- f pop dst = ram[sp]; sp++
 --
 -- condition codes (ARM-style):
 -- 0 always
@@ -193,6 +202,7 @@ begin
     variable dst_reg_v : integer range 0 to 15;
     variable src1_reg_v : integer range 0 to 15;
     variable src2_reg_v : integer range 0 to 15;
+    variable imm4_v : std_logic_vector(3 downto 0);
     variable imm8_v : std_logic_vector(7 downto 0);
     variable imm12_v : std_logic_vector(11 downto 0);
     variable sub_v : std_logic_vector(width_msb+1 downto 0);
@@ -204,6 +214,7 @@ begin
     dst_reg_v := to_integer(unsigned(instr_fetch_cs(11 downto 8)));
     src1_reg_v := to_integer(unsigned(instr_fetch_cs(7 downto 4)));
     src2_reg_v := to_integer(unsigned(instr_fetch_cs(3 downto 0)));
+    imm4_v := instr_fetch_cs(3 downto 0); -- 4 bit immediate
     imm8_v := instr_fetch_cs(7 downto 0); -- 8 bit immediate
     imm12_v := instr_fetch_cs(11 downto 0); -- 8 bit immediate
 
@@ -237,6 +248,22 @@ begin
           reg_bank_v(dst_reg_v) := std_logic_vector(to_unsigned(
             to_integer(unsigned(reg_bank_v(src1_reg_v))) - to_integer(unsigned(reg_bank_v(src2_reg_v))),
             16));
+        when X"5" =>
+          -- dst = src1 and src2
+          reg_bank_v(dst_reg_v) := reg_bank_v(src1_reg_v) and reg_bank_v(src2_reg_v);
+        when X"6" =>
+          -- dst = src1 or src2
+          reg_bank_v(dst_reg_v) := reg_bank_v(src1_reg_v) or reg_bank_v(src2_reg_v);
+        when X"7" =>
+          -- dst = src1 xor src2
+          reg_bank_v(dst_reg_v) := reg_bank_v(src1_reg_v) xor reg_bank_v(src2_reg_v);
+        when X"8" =>
+          -- shift left or right by immediate
+          if imm8_v(3) = '1' then
+            reg_bank_v(dst_reg_v) := to_stdlogicvector(to_bitvector(reg_bank_v(src1_reg_v)) srl to_integer(unsigned(imm4_v(2 downto 0))));
+          else
+            reg_bank_v(dst_reg_v) := to_stdlogicvector(to_bitvector(reg_bank_v(src1_reg_v)) sll to_integer(unsigned(imm4_v(2 downto 0))));
+          end if;
         when X"9" =>
           -- load 12 bit relative immediate pc
           reg_bank_v(reg_pc_idx) := std_logic_vector(to_unsigned(
@@ -261,6 +288,14 @@ begin
           if cond_flags_s(src1_reg_v) = '1' then
             reg_bank_v(reg_pc_idx) := reg_bank_v(dst_reg_v);
           end if;
+        when X"C" =>
+          null;
+        when X"D" =>
+          null;
+        when X"E" =>
+          null;
+        when X"F" =>
+          null;
         when others =>
           null;
       end case;

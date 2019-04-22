@@ -31,6 +31,9 @@ architecture rtl of rom is
     ( X"A" & X"0" & X"1" & X"5" ), -- cmp r1, r5 (0)
     ( X"B" & X"4" & X"2" & X"0" ), -- jmpne r4
 
+    ( X"8" & X"2" & X"2" & "0" & "011" ), -- sht r2, r2, l, 3
+    ( X"8" & X"2" & X"2" & "1" & "010" ), -- sht r2, r2, r, 2
+
     ( X"9" & X"fff" ), -- jmp .
     others => (others => '0') -- nop
     );
