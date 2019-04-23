@@ -101,6 +101,8 @@ architecture rtl of top is
   constant bit_width : natural := 16;
   constant width_msb : natural := bit_width - 1;
 
+  attribute keep : string;
+
   component rom is
       port (
         clk  : in  std_logic;
@@ -143,6 +145,7 @@ architecture rtl of top is
   type reg_bank_type is array (0 to num_regs - 1) of std_logic_vector(width_msb downto 0);
   signal reg_bank_ns : reg_bank_type;
   signal reg_bank_cs : reg_bank_type := (others => (others => '0'));
+  attribute keep of reg_bank_cs : signal is "true";
 
   signal instr_fetch_ns : std_logic_vector(width_msb downto 0);
   signal instr_fetch_cs : std_logic_vector(width_msb downto 0) := (others => '0');
@@ -229,14 +232,14 @@ begin
     imm8_v := instr_fetch_cs(7 downto 0); -- 8 bit immediate
     imm12_v := instr_fetch_cs(11 downto 0); -- 8 bit immediate
 
-    flags_v := reg_bank_v(reg_flags_idx)(3 downto 0);
-
     sub_v := (others => '0');
 
     reg_bank_v := reg_bank_cs;
     ram_di_v := ram_di_cs;
     ram_we_v := ram_we_cs;
     ram_addr_v := ram_addr_cs;
+
+    flags_v := reg_bank_v(reg_flags_idx)(3 downto 0);
 
     if instr_fsm_cs = EXECUTE then
       -- increment pc
@@ -326,8 +329,6 @@ begin
         when others =>
           null;
       end case;
-
-      reg_bank_v(reg_flags_idx)(3 downto 0) := flags_v;
     elsif instr_fsm_cs = MEMACCESS then
       case opcode_v is
         when X"C" =>
@@ -350,13 +351,15 @@ begin
       end case;
     end if;
 
+    reg_bank_v(reg_flags_idx)(3 downto 0) := flags_v;
+
     reg_bank_ns <= reg_bank_v;
     ram_di_ns <= ram_di_v;
     ram_we_ns <= ram_we_v;
     ram_addr_ns <= ram_addr_v;
   end process;
 
-  process (reg_bank_cs, instr_fsm_cs, instr_fetch_cs) is
+  process (reg_bank_cs, instr_fsm_cs, instr_fetch_cs, rom_do_s) is
     variable instr_fsm_v : instr_fsm_type;
     variable instr_fetch_v : std_logic_vector(width_msb downto 0) := (others => '0');
   begin

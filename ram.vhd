@@ -21,18 +21,13 @@ architecture rtl of ram is
   signal ram_data : ram_type := (others => (others => '0'));
 begin
   process (clk) is
-    variable addr_v : std_logic_vector(14 downto 0);
   begin
-    addr_v := (others => '0');
-
     if clk'event and clk = '1' then
-      addr_v := addr(addr'high downto 1); -- *2 for array access
-
       if we = '1' then
-        ram_data(to_integer(unsigned(addr_v))) <= di;
+        ram_data(to_integer(unsigned(addr(addr'high downto 1)))) <= di;
       end if;
 
-      do <= ram_data(to_integer(unsigned(addr_v)));
+      do <= ram_data(to_integer(unsigned(addr(addr'high downto 1))));
     end if;
   end process;
 end architecture rtl;
