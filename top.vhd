@@ -90,6 +90,10 @@ use ieee.numeric_std.all;
 -- d gt (Z=0) && (N=V)
 -- e le (Z=1) || (N!=V)
 -- f reserved
+--
+-- memory map
+-- 0x0000 - 0x7fff: ram
+-- 0x8000 - 0xffff: io
 
 entity top is
   port (
@@ -128,13 +132,21 @@ architecture rtl of top is
   end component ram;
   for all : ram use entity work.ram(rtl);
 
+  -- rom address bus
   signal rom_do_s : std_logic_vector(15 downto 0);
   signal rom_addr_s : std_logic_vector(15 downto 0);
 
+  -- ram address bus
   signal ram_di_s : std_logic_vector(15 downto 0);
   signal ram_do_s : std_logic_vector(15 downto 0);
   signal ram_we_s : std_logic;
   signal ram_addr_s : std_logic_vector(15 downto 0);
+
+  -- io address bus
+  signal io_di_s : std_logic_vector(15 downto 0);
+  signal io_do_s : std_logic_vector(15 downto 0);
+  signal io_we_s : std_logic;
+  signal io_addr_s : std_logic_vector(15 downto 0);
 
   type instr_fsm_type is (FETCH, DECODE, EXECUTE, MEMACCESS);
 
@@ -152,12 +164,14 @@ architecture rtl of top is
   signal instr_fsm_ns : instr_fsm_type;
   signal instr_fsm_cs : instr_fsm_type := FETCH;
 
-  signal ram_di_ns : std_logic_vector(15 downto 0);
-  signal ram_di_cs : std_logic_vector(15 downto 0) := (others => '0');
-  signal ram_we_ns : std_logic;
-  signal ram_we_cs : std_logic := '0';
-  signal ram_addr_ns : std_logic_vector(15 downto 0);
-  signal ram_addr_cs : std_logic_vector(15 downto 0) := (others => '0');
+  -- memory bus
+  signal mem_do_s : std_logic_vector(15 downto 0);
+  signal mem_di_ns : std_logic_vector(15 downto 0);
+  signal mem_di_cs : std_logic_vector(15 downto 0) := (others => '0');
+  signal mem_we_ns : std_logic;
+  signal mem_we_cs : std_logic := '0';
+  signal mem_addr_ns : std_logic_vector(15 downto 0);
+  signal mem_addr_cs : std_logic_vector(15 downto 0) := (others => '0');
 
   signal cond_flags_s : std_logic_vector(width_msb downto 0);
 begin
@@ -180,6 +194,50 @@ begin
       do => ram_do_s,
       we => ram_we_s,
       addr => ram_addr_s);
+
+  memmap: process (mem_di_cs, ram_do_s, io_do_s, mem_we_cs, mem_addr_cs) is
+    variable mem_do_v : std_logic_vector(15 downto 0);
+
+    variable ram_di_v : std_logic_vector(15 downto 0);
+    variable ram_we_v : std_logic;
+    variable ram_addr_v : std_logic_vector(15 downto 0);
+
+    variable io_di_v : std_logic_vector(15 downto 0);
+    variable io_we_v : std_logic;
+    variable io_addr_v : std_logic_vector(15 downto 0);
+  begin
+    mem_do_v := (others => '0');
+
+    ram_di_v := (others => '0');
+    ram_we_v := '0';
+    ram_addr_v := (others => '0');
+
+    io_di_v := (others => '0');
+    io_we_v := '0';
+    io_addr_v := (others => '0');
+
+    if mem_addr_cs(15) = '0' then
+      mem_do_v := ram_do_s;
+      ram_di_v := mem_di_cs;
+      ram_we_v := mem_we_cs;
+      ram_addr_v := mem_addr_cs;
+    else
+      mem_do_v := io_do_s;
+      io_di_v := mem_di_cs;
+      io_we_v := mem_we_cs;
+      io_addr_v := mem_addr_cs;
+    end if;
+
+    mem_do_s <= mem_do_v;
+
+    ram_di_s <= ram_di_v;
+    ram_we_s <= ram_we_v;
+    ram_addr_s <= ram_addr_v;
+
+    io_di_s <= io_di_v;
+    io_we_s <= io_we_v;
+    io_addr_s <= io_addr_v;
+  end process;
 
   cond_flags: process (reg_bank_cs) is
     variable cond_flags_v : std_logic_vector(width_msb downto 0);
@@ -208,7 +266,7 @@ begin
     cond_flags_s <= cond_flags_v;
   end process;
 
-  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs, cond_flags_s, ram_di_cs, ram_do_s, ram_we_cs, ram_addr_cs) is
+  process (instr_fetch_cs, reg_bank_cs, instr_fsm_cs, cond_flags_s, mem_di_cs, mem_do_s, mem_we_cs, mem_addr_cs) is
     variable opcode_v : std_logic_vector(3 downto 0);
     variable dst_reg_v : integer range 0 to 15;
     variable src1_reg_v : integer range 0 to 15;
@@ -220,9 +278,9 @@ begin
     variable flags_v : std_logic_vector(3 downto 0);
 
     variable reg_bank_v : reg_bank_type;
-    variable ram_di_v : std_logic_vector(15 downto 0);
-    variable ram_we_v : std_logic;
-    variable ram_addr_v : std_logic_vector(15 downto 0);
+    variable mem_di_v : std_logic_vector(15 downto 0);
+    variable mem_we_v : std_logic;
+    variable mem_addr_v : std_logic_vector(15 downto 0);
   begin
     opcode_v := instr_fetch_cs(15 downto 12);
     dst_reg_v := to_integer(unsigned(instr_fetch_cs(11 downto 8)));
@@ -235,9 +293,9 @@ begin
     sub_v := (others => '0');
 
     reg_bank_v := reg_bank_cs;
-    ram_di_v := ram_di_cs;
-    ram_we_v := ram_we_cs;
-    ram_addr_v := ram_addr_cs;
+    mem_di_v := mem_di_cs;
+    mem_we_v := mem_we_cs;
+    mem_addr_v := mem_addr_cs;
 
     flags_v := reg_bank_v(reg_flags_idx)(3 downto 0);
 
@@ -307,25 +365,25 @@ begin
           end if;
         when X"C" =>
           -- load from memory
-          ram_addr_v := reg_bank_v(src1_reg_v);
-          ram_we_v := '0';
+          mem_addr_v := reg_bank_v(src1_reg_v);
+          mem_we_v := '0';
         when X"D" =>
           -- store in memory
-          ram_addr_v := reg_bank_v(dst_reg_v);
-          ram_di_v := reg_bank_v(src1_reg_v);
-          ram_we_v := '1';
+          mem_addr_v := reg_bank_v(dst_reg_v);
+          mem_di_v := reg_bank_v(src1_reg_v);
+          mem_we_v := '1';
         when X"E" =>
           -- push to stack, sp post decrement
-          ram_addr_v := reg_bank_v(reg_sp_idx);
-          ram_di_v := reg_bank_v(dst_reg_v);
-          ram_we_v := '1';
+          mem_addr_v := reg_bank_v(reg_sp_idx);
+          mem_di_v := reg_bank_v(dst_reg_v);
+          mem_we_v := '1';
         when X"F" =>
           -- pop from stack, pre increment
           reg_bank_v(reg_sp_idx) := std_logic_vector(to_unsigned(
             to_integer(unsigned(reg_bank_v(reg_sp_idx))) + 2,
             16));
-          ram_addr_v := reg_bank_v(reg_sp_idx);
-          ram_we_v := '0';
+          mem_addr_v := reg_bank_v(reg_sp_idx);
+          mem_we_v := '0';
         when others =>
           null;
       end case;
@@ -333,13 +391,13 @@ begin
       case opcode_v is
         when X"C" =>
           -- load
-          reg_bank_v(dst_reg_v) := ram_do_s;
+          reg_bank_v(dst_reg_v) := mem_do_s;
         when X"D" =>
           -- store
-          ram_we_v := '0';
+          mem_we_v := '0';
         when X"E" =>
           -- push
-          ram_we_v := '0';
+          mem_we_v := '0';
           reg_bank_v(reg_sp_idx) := std_logic_vector(to_unsigned(
             to_integer(unsigned(reg_bank_v(reg_sp_idx))) - 2,
             16));
@@ -354,9 +412,9 @@ begin
     reg_bank_v(reg_flags_idx)(3 downto 0) := flags_v;
 
     reg_bank_ns <= reg_bank_v;
-    ram_di_ns <= ram_di_v;
-    ram_we_ns <= ram_we_v;
-    ram_addr_ns <= ram_addr_v;
+    mem_di_ns <= mem_di_v;
+    mem_we_ns <= mem_we_v;
+    mem_addr_ns <= mem_addr_v;
   end process;
 
   process (reg_bank_cs, instr_fsm_cs, instr_fetch_cs, rom_do_s) is
@@ -393,22 +451,18 @@ begin
         instr_fetch_cs <= (others => '0');
         instr_fsm_cs <= FETCH;
 
-        ram_di_cs <= (others => '0');
-        ram_we_cs <= '0';
-        ram_addr_cs <= (others => '0');
+        mem_di_cs <= (others => '0');
+        mem_we_cs <= '0';
+        mem_addr_cs <= (others => '0');
       else
         reg_bank_cs <= reg_bank_ns;
         instr_fetch_cs <= instr_fetch_ns;
         instr_fsm_cs <= instr_fsm_ns;
 
-        ram_di_cs <= ram_di_ns;
-        ram_we_cs <= ram_we_ns;
-        ram_addr_cs <= ram_addr_ns;
+        mem_di_cs <= mem_di_ns;
+        mem_we_cs <= mem_we_ns;
+        mem_addr_cs <= mem_addr_ns;
       end if;
     end if;
   end process;
-
-  ram_addr_s <= ram_addr_cs;
-  ram_di_s <= ram_di_cs;
-  ram_we_s <= ram_we_cs;
 end architecture rtl;
