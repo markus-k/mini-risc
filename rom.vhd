@@ -45,6 +45,14 @@ architecture rtl of rom is
     ( X"C" & X"1" & X"5" & X"0" ), -- ldr r2, r5
     ( X"F" & X"2" & X"00"), -- pop r2
 
+    ( X"1" & X"0" & X"00" ), -- movil r0, 0x00
+    ( X"2" & X"0" & X"80" ), -- movih r0, 0x80
+    ( X"1" & X"1" & X"01" ), -- movih r1, 0x01
+    ( X"2" & X"1" & X"00" ), -- movil r1, 0x00
+    ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
+    ( X"1" & X"0" & X"02" ), -- movil r0, 0x00
+    ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
+
     ( X"9" & X"fff" ), -- jmp .
     others => (others => '0') -- nop
     );

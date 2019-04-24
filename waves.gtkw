@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
-[*] Wed Apr 24 06:46:46 2019
+[*] Wed Apr 24 09:13:21 2019
 [*]
-[dumpfile] "/home/markus/Nextcloud/Developer/mini_cpu/waves.ghw"
-[dumpfile_mtime] "Wed Apr 24 06:45:04 2019"
-[dumpfile_size] 26270
-[savefile] "/home/markus/Nextcloud/Developer/mini_cpu/waves.gtkw"
-[timestart] 2513000000
+[dumpfile] "/home/markus/Nextcloud/Developer/mini-risc/waves.ghw"
+[dumpfile_mtime] "Wed Apr 24 09:11:23 2019"
+[dumpfile_size] 28290
+[savefile] "/home/markus/Nextcloud/Developer/mini-risc/waves.gtkw"
+[timestart] 3335000000
 [size] 1366 716
 [pos] -1 -1
-*-28.470572 4216000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.470572 4013000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.testbench.
 [treeopen] top.testbench.dut.
@@ -102,5 +102,26 @@ top.testbench.dut.core_1.reg_bank_cs[2][0]
 +{sp} #{top.testbench.dut.core_1.reg_bank_cs[13][15:0]} top.testbench.dut.core_1.reg_bank_cs[13][15] top.testbench.dut.core_1.reg_bank_cs[13][14] top.testbench.dut.core_1.reg_bank_cs[13][13] top.testbench.dut.core_1.reg_bank_cs[13][12] top.testbench.dut.core_1.reg_bank_cs[13][11] top.testbench.dut.core_1.reg_bank_cs[13][10] top.testbench.dut.core_1.reg_bank_cs[13][9] top.testbench.dut.core_1.reg_bank_cs[13][8] top.testbench.dut.core_1.reg_bank_cs[13][7] top.testbench.dut.core_1.reg_bank_cs[13][6] top.testbench.dut.core_1.reg_bank_cs[13][5] top.testbench.dut.core_1.reg_bank_cs[13][4] top.testbench.dut.core_1.reg_bank_cs[13][3] top.testbench.dut.core_1.reg_bank_cs[13][2] top.testbench.dut.core_1.reg_bank_cs[13][1] top.testbench.dut.core_1.reg_bank_cs[13][0]
 #{top.testbench.dut.core_1.rom_addr_s[15:0]} top.testbench.dut.core_1.rom_addr_s[15] top.testbench.dut.core_1.rom_addr_s[14] top.testbench.dut.core_1.rom_addr_s[13] top.testbench.dut.core_1.rom_addr_s[12] top.testbench.dut.core_1.rom_addr_s[11] top.testbench.dut.core_1.rom_addr_s[10] top.testbench.dut.core_1.rom_addr_s[9] top.testbench.dut.core_1.rom_addr_s[8] top.testbench.dut.core_1.rom_addr_s[7] top.testbench.dut.core_1.rom_addr_s[6] top.testbench.dut.core_1.rom_addr_s[5] top.testbench.dut.core_1.rom_addr_s[4] top.testbench.dut.core_1.rom_addr_s[3] top.testbench.dut.core_1.rom_addr_s[2] top.testbench.dut.core_1.rom_addr_s[1] top.testbench.dut.core_1.rom_addr_s[0]
 #{top.testbench.dut.core_1.rom_do_s[15:0]} top.testbench.dut.core_1.rom_do_s[15] top.testbench.dut.core_1.rom_do_s[14] top.testbench.dut.core_1.rom_do_s[13] top.testbench.dut.core_1.rom_do_s[12] top.testbench.dut.core_1.rom_do_s[11] top.testbench.dut.core_1.rom_do_s[10] top.testbench.dut.core_1.rom_do_s[9] top.testbench.dut.core_1.rom_do_s[8] top.testbench.dut.core_1.rom_do_s[7] top.testbench.dut.core_1.rom_do_s[6] top.testbench.dut.core_1.rom_do_s[5] top.testbench.dut.core_1.rom_do_s[4] top.testbench.dut.core_1.rom_do_s[3] top.testbench.dut.core_1.rom_do_s[2] top.testbench.dut.core_1.rom_do_s[1] top.testbench.dut.core_1.rom_do_s[0]
+@c00029
+#{top.testbench.dut.gpio_pins_s[15:0]} top.testbench.dut.gpio_pins_s[15] top.testbench.dut.gpio_pins_s[14] top.testbench.dut.gpio_pins_s[13] top.testbench.dut.gpio_pins_s[12] top.testbench.dut.gpio_pins_s[11] top.testbench.dut.gpio_pins_s[10] top.testbench.dut.gpio_pins_s[9] top.testbench.dut.gpio_pins_s[8] top.testbench.dut.gpio_pins_s[7] top.testbench.dut.gpio_pins_s[6] top.testbench.dut.gpio_pins_s[5] top.testbench.dut.gpio_pins_s[4] top.testbench.dut.gpio_pins_s[3] top.testbench.dut.gpio_pins_s[2] top.testbench.dut.gpio_pins_s[1] top.testbench.dut.gpio_pins_s[0]
+@28
+top.testbench.dut.gpio_pins_s[15]
+top.testbench.dut.gpio_pins_s[14]
+top.testbench.dut.gpio_pins_s[13]
+top.testbench.dut.gpio_pins_s[12]
+top.testbench.dut.gpio_pins_s[11]
+top.testbench.dut.gpio_pins_s[10]
+top.testbench.dut.gpio_pins_s[9]
+top.testbench.dut.gpio_pins_s[8]
+top.testbench.dut.gpio_pins_s[7]
+top.testbench.dut.gpio_pins_s[6]
+top.testbench.dut.gpio_pins_s[5]
+top.testbench.dut.gpio_pins_s[4]
+top.testbench.dut.gpio_pins_s[3]
+top.testbench.dut.gpio_pins_s[2]
+top.testbench.dut.gpio_pins_s[1]
+top.testbench.dut.gpio_pins_s[0]
+@1401209
+-group_end
 [pattern_trace] 1
 [pattern_trace] 0

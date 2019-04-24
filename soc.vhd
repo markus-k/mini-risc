@@ -57,6 +57,22 @@ architecture rtl of soc is
   end component ram;
   for all : ram use entity work.ram(rtl);
 
+  component periph_gpio is
+    port (
+      clk  : in std_logic;
+      nres : in std_logic;
+
+      -- gpio pins
+      pins : inout std_logic_vector(15 downto 0);
+
+      -- io bus
+      io_di : in std_logic_vector(15 downto 0);
+      io_do : out std_logic_vector(15 downto 0);
+      io_we : in std_logic;
+      io_addr : in std_logic_vector(15 downto 0));
+  end component periph_gpio;
+  for all : periph_gpio use entity work.periph_gpio(rtl);
+
   signal rom_do_s : std_logic_vector(15 downto 0);
   signal rom_addr_s : std_logic_vector(15 downto 0);
 
@@ -64,6 +80,8 @@ architecture rtl of soc is
   signal ram_do_s : std_logic_vector(15 downto 0);
   signal ram_we_s : std_logic;
   signal ram_addr_s : std_logic_vector(15 downto 0);
+
+  signal gpio_pins_s : std_logic_vector(15 downto 0);
 
   signal io_di_s : std_logic_vector(15 downto 0);
   signal io_do_s : std_logic_vector(15 downto 0);
@@ -90,7 +108,19 @@ begin
       we => ram_we_s,
       addr => ram_addr_s);
 
-  core_1: core
+  gpio_1 : periph_gpio
+    port map (
+      clk => clk,
+      nres => nres,
+
+      pins => gpio_pins_s,
+
+      io_di => io_di_s,
+      io_do => io_do_s,
+      io_we => io_we_s,
+      io_addr => io_addr_s);
+
+  core_1 : core
     port map (
       clk      => clk,
       nres     => nres,
