@@ -8,11 +8,11 @@ architecture bhv of testbench is
   constant clkHalfPeriod : time := 10 ns;
   constant clkFullPeriod : time := clkHalfPeriod * 2;
 
-  component top is
+  component soc is
     port (
       clk : in std_logic;
       nres : in std_logic);
-  end component top;
+  end component soc;
 
   signal simulation_done : boolean := false;
   signal clk_s : std_logic;
@@ -46,7 +46,7 @@ begin  -- architecture bhv
     wait;
   end process;
 
-  dut : top
+  dut : soc
     port map (
       clk => clk_s,
       nres => nres_s);
