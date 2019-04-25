@@ -4,6 +4,7 @@
 *.ghw
 *.vcd
 /testbench
+/asm/asm
 
 # emacs crap
 .\#*
