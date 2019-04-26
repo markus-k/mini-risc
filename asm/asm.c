@@ -4,6 +4,17 @@
 #include <string.h>
 
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
+#define BYTE_TO_BINARY(byte)  \
+  (byte & 0x80 ? '1' : '0'), \
+  (byte & 0x40 ? '1' : '0'), \
+  (byte & 0x20 ? '1' : '0'), \
+  (byte & 0x10 ? '1' : '0'), \
+  (byte & 0x08 ? '1' : '0'), \
+  (byte & 0x04 ? '1' : '0'), \
+  (byte & 0x02 ? '1' : '0'), \
+  (byte & 0x01 ? '1' : '0')
+
 #define LINE_LEN 120
 #define PROGRAM_LEN 1000
 #define LABELS_LEN 100
@@ -160,6 +171,11 @@ int main(int argc, char **argv) {
 
     while (fgets(line, sizeof(line), fd) != NULL) {
         token = strtok(line, STRTOK_SEP);
+
+        if (token && token[0] == '#') {
+            // comment, ignore
+            continue;
+        }
 
         while (token) {
             if (strcmp(token, "mov") == 0) {
@@ -322,8 +338,11 @@ int main(int argc, char **argv) {
                     // ends with colon, is a label
                     labels[labelcounter].location = counter;
                     // copy name without colon
-                    strncpy(labels[labelcounter].name, token, MIN(LABEL_LEN, len - 2));
+                    strncpy(labels[labelcounter].name, token, MIN(LABEL_LEN, len - 1));
                     labelcounter++;
+                } else {
+                    fprintf(stderr, "error: unkown instruction '%s'\n", token);
+                    exit(2);
                 }
             }
 
@@ -336,6 +355,11 @@ int main(int argc, char **argv) {
     /****** resolve labels *******/
 
     // TODO
+
+    printf("label table:\n");
+    for (int i = 0; i < labelcounter; i++) {
+        printf("%16s: 0x%.2x\n", labels[i].name, labels[i].location);
+    }
 
     /****** generate machine code ******/
 
@@ -397,7 +421,9 @@ int main(int argc, char **argv) {
         buf[0] = instr >> 8;
         buf[1] = instr;
 
-        fwrite(&buf, 1, sizeof(buf), fd);
+        //fprintf(fd, "%.2x\n", instr);
+        fprintf(fd, BYTE_TO_BINARY_PATTERN BYTE_TO_BINARY_PATTERN "\n", BYTE_TO_BINARY(buf[0]), BYTE_TO_BINARY(buf[1]));
+        //fwrite(&buf, 1, sizeof(buf), fd);
     }
 
     fclose(fd);
