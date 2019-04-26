@@ -22,6 +22,8 @@ architecture rtl of rom is
     variable rom_value : bit_vector(15 downto 0);
     variable temp : rom_type;
   begin
+    temp := (others => (others => '0'));
+
     for rom_index in 0 to rom_size-1 loop
       if not endfile(rom_file) then
         readline(rom_file, rom_line);
@@ -29,52 +31,11 @@ architecture rtl of rom is
         temp(rom_index) := to_stdlogicvector(rom_value);
       end if;
     end loop;
+
     return temp;
   end function;
 
-  constant rom_data : rom_type := (
-    ( X"1" & X"d" & X"ff" ), -- movil sp, 0xff
-    ( X"2" & X"d" & X"00" ), -- movih sp, 0x00
-
-    ( X"1" & X"0" & X"05" ), -- movil r0, 0x05
-    ( X"2" & X"0" & X"01" ), -- movih r0, 0x01
-    ( X"1" & X"1" & X"06" ), -- movil r1, 0x06
-    ( X"1" & X"2" & X"00" ), -- movil r2, 0x00
-    ( X"2" & X"2" & X"00" ), -- movih r2, 0x00
-
-    ( X"1" & X"3" & X"01" ), -- movil r3, 0x01
-    ( X"2" & X"3" & X"00" ), -- movih r3, 0x00
-
-    ( X"1" & X"4" & X"0b" ), -- movil r4, 0x0b
-    ( X"2" & X"4" & X"00" ), -- movih r4, 0x00
-
-    ( X"4" & X"1" & X"1" & X"3" ), -- sub r1, r1, r3
-    ( X"3" & X"2" & X"2" & X"0" ), -- add r2, r2, r0
-    ( X"A" & X"0" & X"1" & X"5" ), -- cmp r1, r5 (0)
-    ( X"B" & X"4" & X"2" & X"0" ), -- jmpne r4
-
-    ( X"1" & X"5" & X"02" ), -- movil r5, 0x02
-
-    ( X"D" & X"5" & X"2" & X"0" ), -- str r5, r2
-    ( X"E" & X"2" & X"00"), -- push r2
-
-    ( X"8" & X"2" & X"2" & "0" & "011" ), -- sht r2, r2, l, 3
-    ( X"8" & X"2" & X"2" & "1" & "010" ), -- sht r2, r2, r, 2
-
-    ( X"C" & X"1" & X"5" & X"0" ), -- ldr r1, r5
-    ( X"F" & X"2" & X"00"), -- pop r2
-
-    ( X"1" & X"0" & X"00" ), -- movil r0, 0x00
-    ( X"2" & X"0" & X"80" ), -- movih r0, 0x80
-    ( X"1" & X"1" & X"01" ), -- movih r1, 0x01
-    ( X"2" & X"1" & X"00" ), -- movil r1, 0x00
-    ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
-    ( X"1" & X"0" & X"02" ), -- movil r0, 0x02
-    ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
-
-    ( X"9" & X"fff" ), -- jmp .
-    others => (others => '0') -- nop
-    );
+  constant rom_data : rom_type := rom_init(filename => "asm/test.out");
 begin
   process (clk) is
   begin
