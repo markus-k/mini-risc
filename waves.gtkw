@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.94 (w)1999-2018 BSI
-[*] Wed Apr 24 09:13:21 2019
+[*] Fri Apr 26 10:29:40 2019
 [*]
 [dumpfile] "/home/markus/Nextcloud/Developer/mini-risc/waves.ghw"
-[dumpfile_mtime] "Wed Apr 24 09:11:23 2019"
-[dumpfile_size] 28290
+[dumpfile_mtime] "Fri Apr 26 10:28:09 2019"
+[dumpfile_size] 42546
 [savefile] "/home/markus/Nextcloud/Developer/mini-risc/waves.gtkw"
-[timestart] 3335000000
+[timestart] 4406000000
 [size] 1366 716
 [pos] -1 -1
-*-28.470572 4013000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.470572 1731000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.testbench.
 [treeopen] top.testbench.dut.
@@ -99,10 +99,59 @@ top.testbench.dut.core_1.reg_bank_cs[2][0]
 +{r3} #{top.testbench.dut.core_1.reg_bank_cs[3][15:0]} top.testbench.dut.core_1.reg_bank_cs[3][15] top.testbench.dut.core_1.reg_bank_cs[3][14] top.testbench.dut.core_1.reg_bank_cs[3][13] top.testbench.dut.core_1.reg_bank_cs[3][12] top.testbench.dut.core_1.reg_bank_cs[3][11] top.testbench.dut.core_1.reg_bank_cs[3][10] top.testbench.dut.core_1.reg_bank_cs[3][9] top.testbench.dut.core_1.reg_bank_cs[3][8] top.testbench.dut.core_1.reg_bank_cs[3][7] top.testbench.dut.core_1.reg_bank_cs[3][6] top.testbench.dut.core_1.reg_bank_cs[3][5] top.testbench.dut.core_1.reg_bank_cs[3][4] top.testbench.dut.core_1.reg_bank_cs[3][3] top.testbench.dut.core_1.reg_bank_cs[3][2] top.testbench.dut.core_1.reg_bank_cs[3][1] top.testbench.dut.core_1.reg_bank_cs[3][0]
 +{r4} #{top.testbench.dut.core_1.reg_bank_cs[4][15:0]} top.testbench.dut.core_1.reg_bank_cs[4][15] top.testbench.dut.core_1.reg_bank_cs[4][14] top.testbench.dut.core_1.reg_bank_cs[4][13] top.testbench.dut.core_1.reg_bank_cs[4][12] top.testbench.dut.core_1.reg_bank_cs[4][11] top.testbench.dut.core_1.reg_bank_cs[4][10] top.testbench.dut.core_1.reg_bank_cs[4][9] top.testbench.dut.core_1.reg_bank_cs[4][8] top.testbench.dut.core_1.reg_bank_cs[4][7] top.testbench.dut.core_1.reg_bank_cs[4][6] top.testbench.dut.core_1.reg_bank_cs[4][5] top.testbench.dut.core_1.reg_bank_cs[4][4] top.testbench.dut.core_1.reg_bank_cs[4][3] top.testbench.dut.core_1.reg_bank_cs[4][2] top.testbench.dut.core_1.reg_bank_cs[4][1] top.testbench.dut.core_1.reg_bank_cs[4][0]
 +{r5} #{top.testbench.dut.core_1.reg_bank_cs[5][15:0]} top.testbench.dut.core_1.reg_bank_cs[5][15] top.testbench.dut.core_1.reg_bank_cs[5][14] top.testbench.dut.core_1.reg_bank_cs[5][13] top.testbench.dut.core_1.reg_bank_cs[5][12] top.testbench.dut.core_1.reg_bank_cs[5][11] top.testbench.dut.core_1.reg_bank_cs[5][10] top.testbench.dut.core_1.reg_bank_cs[5][9] top.testbench.dut.core_1.reg_bank_cs[5][8] top.testbench.dut.core_1.reg_bank_cs[5][7] top.testbench.dut.core_1.reg_bank_cs[5][6] top.testbench.dut.core_1.reg_bank_cs[5][5] top.testbench.dut.core_1.reg_bank_cs[5][4] top.testbench.dut.core_1.reg_bank_cs[5][3] top.testbench.dut.core_1.reg_bank_cs[5][2] top.testbench.dut.core_1.reg_bank_cs[5][1] top.testbench.dut.core_1.reg_bank_cs[5][0]
+@c00022
++{r6} #{top.testbench.dut.core_1.reg_bank_cs[6][15:0]} top.testbench.dut.core_1.reg_bank_cs[6][15] top.testbench.dut.core_1.reg_bank_cs[6][14] top.testbench.dut.core_1.reg_bank_cs[6][13] top.testbench.dut.core_1.reg_bank_cs[6][12] top.testbench.dut.core_1.reg_bank_cs[6][11] top.testbench.dut.core_1.reg_bank_cs[6][10] top.testbench.dut.core_1.reg_bank_cs[6][9] top.testbench.dut.core_1.reg_bank_cs[6][8] top.testbench.dut.core_1.reg_bank_cs[6][7] top.testbench.dut.core_1.reg_bank_cs[6][6] top.testbench.dut.core_1.reg_bank_cs[6][5] top.testbench.dut.core_1.reg_bank_cs[6][4] top.testbench.dut.core_1.reg_bank_cs[6][3] top.testbench.dut.core_1.reg_bank_cs[6][2] top.testbench.dut.core_1.reg_bank_cs[6][1] top.testbench.dut.core_1.reg_bank_cs[6][0]
+@28
+top.testbench.dut.core_1.reg_bank_cs[6][15]
+top.testbench.dut.core_1.reg_bank_cs[6][14]
+top.testbench.dut.core_1.reg_bank_cs[6][13]
+top.testbench.dut.core_1.reg_bank_cs[6][12]
+top.testbench.dut.core_1.reg_bank_cs[6][11]
+top.testbench.dut.core_1.reg_bank_cs[6][10]
+top.testbench.dut.core_1.reg_bank_cs[6][9]
+top.testbench.dut.core_1.reg_bank_cs[6][8]
+top.testbench.dut.core_1.reg_bank_cs[6][7]
+top.testbench.dut.core_1.reg_bank_cs[6][6]
+top.testbench.dut.core_1.reg_bank_cs[6][5]
+top.testbench.dut.core_1.reg_bank_cs[6][4]
+top.testbench.dut.core_1.reg_bank_cs[6][3]
+top.testbench.dut.core_1.reg_bank_cs[6][2]
+top.testbench.dut.core_1.reg_bank_cs[6][1]
+top.testbench.dut.core_1.reg_bank_cs[6][0]
+@1401200
+-group_end
+@22
++{r7} #{top.testbench.dut.core_1.reg_bank_cs[7][15:0]} top.testbench.dut.core_1.reg_bank_cs[7][15] top.testbench.dut.core_1.reg_bank_cs[7][14] top.testbench.dut.core_1.reg_bank_cs[7][13] top.testbench.dut.core_1.reg_bank_cs[7][12] top.testbench.dut.core_1.reg_bank_cs[7][11] top.testbench.dut.core_1.reg_bank_cs[7][10] top.testbench.dut.core_1.reg_bank_cs[7][9] top.testbench.dut.core_1.reg_bank_cs[7][8] top.testbench.dut.core_1.reg_bank_cs[7][7] top.testbench.dut.core_1.reg_bank_cs[7][6] top.testbench.dut.core_1.reg_bank_cs[7][5] top.testbench.dut.core_1.reg_bank_cs[7][4] top.testbench.dut.core_1.reg_bank_cs[7][3] top.testbench.dut.core_1.reg_bank_cs[7][2] top.testbench.dut.core_1.reg_bank_cs[7][1] top.testbench.dut.core_1.reg_bank_cs[7][0]
+@c00022
++{r8} #{top.testbench.dut.core_1.reg_bank_cs[8][15:0]} top.testbench.dut.core_1.reg_bank_cs[8][15] top.testbench.dut.core_1.reg_bank_cs[8][14] top.testbench.dut.core_1.reg_bank_cs[8][13] top.testbench.dut.core_1.reg_bank_cs[8][12] top.testbench.dut.core_1.reg_bank_cs[8][11] top.testbench.dut.core_1.reg_bank_cs[8][10] top.testbench.dut.core_1.reg_bank_cs[8][9] top.testbench.dut.core_1.reg_bank_cs[8][8] top.testbench.dut.core_1.reg_bank_cs[8][7] top.testbench.dut.core_1.reg_bank_cs[8][6] top.testbench.dut.core_1.reg_bank_cs[8][5] top.testbench.dut.core_1.reg_bank_cs[8][4] top.testbench.dut.core_1.reg_bank_cs[8][3] top.testbench.dut.core_1.reg_bank_cs[8][2] top.testbench.dut.core_1.reg_bank_cs[8][1] top.testbench.dut.core_1.reg_bank_cs[8][0]
+@28
+top.testbench.dut.core_1.reg_bank_cs[8][15]
+top.testbench.dut.core_1.reg_bank_cs[8][14]
+top.testbench.dut.core_1.reg_bank_cs[8][13]
+top.testbench.dut.core_1.reg_bank_cs[8][12]
+top.testbench.dut.core_1.reg_bank_cs[8][11]
+top.testbench.dut.core_1.reg_bank_cs[8][10]
+top.testbench.dut.core_1.reg_bank_cs[8][9]
+top.testbench.dut.core_1.reg_bank_cs[8][8]
+top.testbench.dut.core_1.reg_bank_cs[8][7]
+top.testbench.dut.core_1.reg_bank_cs[8][6]
+top.testbench.dut.core_1.reg_bank_cs[8][5]
+top.testbench.dut.core_1.reg_bank_cs[8][4]
+top.testbench.dut.core_1.reg_bank_cs[8][3]
+top.testbench.dut.core_1.reg_bank_cs[8][2]
+top.testbench.dut.core_1.reg_bank_cs[8][1]
+top.testbench.dut.core_1.reg_bank_cs[8][0]
+@1401200
+-group_end
+@22
++{r9} #{top.testbench.dut.core_1.reg_bank_cs[9][15:0]} top.testbench.dut.core_1.reg_bank_cs[9][15] top.testbench.dut.core_1.reg_bank_cs[9][14] top.testbench.dut.core_1.reg_bank_cs[9][13] top.testbench.dut.core_1.reg_bank_cs[9][12] top.testbench.dut.core_1.reg_bank_cs[9][11] top.testbench.dut.core_1.reg_bank_cs[9][10] top.testbench.dut.core_1.reg_bank_cs[9][9] top.testbench.dut.core_1.reg_bank_cs[9][8] top.testbench.dut.core_1.reg_bank_cs[9][7] top.testbench.dut.core_1.reg_bank_cs[9][6] top.testbench.dut.core_1.reg_bank_cs[9][5] top.testbench.dut.core_1.reg_bank_cs[9][4] top.testbench.dut.core_1.reg_bank_cs[9][3] top.testbench.dut.core_1.reg_bank_cs[9][2] top.testbench.dut.core_1.reg_bank_cs[9][1] top.testbench.dut.core_1.reg_bank_cs[9][0]
++{r10} #{top.testbench.dut.core_1.reg_bank_cs[10][15:0]} top.testbench.dut.core_1.reg_bank_cs[10][15] top.testbench.dut.core_1.reg_bank_cs[10][14] top.testbench.dut.core_1.reg_bank_cs[10][13] top.testbench.dut.core_1.reg_bank_cs[10][12] top.testbench.dut.core_1.reg_bank_cs[10][11] top.testbench.dut.core_1.reg_bank_cs[10][10] top.testbench.dut.core_1.reg_bank_cs[10][9] top.testbench.dut.core_1.reg_bank_cs[10][8] top.testbench.dut.core_1.reg_bank_cs[10][7] top.testbench.dut.core_1.reg_bank_cs[10][6] top.testbench.dut.core_1.reg_bank_cs[10][5] top.testbench.dut.core_1.reg_bank_cs[10][4] top.testbench.dut.core_1.reg_bank_cs[10][3] top.testbench.dut.core_1.reg_bank_cs[10][2] top.testbench.dut.core_1.reg_bank_cs[10][1] top.testbench.dut.core_1.reg_bank_cs[10][0]
++{r11} #{top.testbench.dut.core_1.reg_bank_cs[11][15:0]} top.testbench.dut.core_1.reg_bank_cs[11][15] top.testbench.dut.core_1.reg_bank_cs[11][14] top.testbench.dut.core_1.reg_bank_cs[11][13] top.testbench.dut.core_1.reg_bank_cs[11][12] top.testbench.dut.core_1.reg_bank_cs[11][11] top.testbench.dut.core_1.reg_bank_cs[11][10] top.testbench.dut.core_1.reg_bank_cs[11][9] top.testbench.dut.core_1.reg_bank_cs[11][8] top.testbench.dut.core_1.reg_bank_cs[11][7] top.testbench.dut.core_1.reg_bank_cs[11][6] top.testbench.dut.core_1.reg_bank_cs[11][5] top.testbench.dut.core_1.reg_bank_cs[11][4] top.testbench.dut.core_1.reg_bank_cs[11][3] top.testbench.dut.core_1.reg_bank_cs[11][2] top.testbench.dut.core_1.reg_bank_cs[11][1] top.testbench.dut.core_1.reg_bank_cs[11][0]
++{r12} #{top.testbench.dut.core_1.reg_bank_cs[12][15:0]} top.testbench.dut.core_1.reg_bank_cs[12][15] top.testbench.dut.core_1.reg_bank_cs[12][14] top.testbench.dut.core_1.reg_bank_cs[12][13] top.testbench.dut.core_1.reg_bank_cs[12][12] top.testbench.dut.core_1.reg_bank_cs[12][11] top.testbench.dut.core_1.reg_bank_cs[12][10] top.testbench.dut.core_1.reg_bank_cs[12][9] top.testbench.dut.core_1.reg_bank_cs[12][8] top.testbench.dut.core_1.reg_bank_cs[12][7] top.testbench.dut.core_1.reg_bank_cs[12][6] top.testbench.dut.core_1.reg_bank_cs[12][5] top.testbench.dut.core_1.reg_bank_cs[12][4] top.testbench.dut.core_1.reg_bank_cs[12][3] top.testbench.dut.core_1.reg_bank_cs[12][2] top.testbench.dut.core_1.reg_bank_cs[12][1] top.testbench.dut.core_1.reg_bank_cs[12][0]
 +{sp} #{top.testbench.dut.core_1.reg_bank_cs[13][15:0]} top.testbench.dut.core_1.reg_bank_cs[13][15] top.testbench.dut.core_1.reg_bank_cs[13][14] top.testbench.dut.core_1.reg_bank_cs[13][13] top.testbench.dut.core_1.reg_bank_cs[13][12] top.testbench.dut.core_1.reg_bank_cs[13][11] top.testbench.dut.core_1.reg_bank_cs[13][10] top.testbench.dut.core_1.reg_bank_cs[13][9] top.testbench.dut.core_1.reg_bank_cs[13][8] top.testbench.dut.core_1.reg_bank_cs[13][7] top.testbench.dut.core_1.reg_bank_cs[13][6] top.testbench.dut.core_1.reg_bank_cs[13][5] top.testbench.dut.core_1.reg_bank_cs[13][4] top.testbench.dut.core_1.reg_bank_cs[13][3] top.testbench.dut.core_1.reg_bank_cs[13][2] top.testbench.dut.core_1.reg_bank_cs[13][1] top.testbench.dut.core_1.reg_bank_cs[13][0]
 #{top.testbench.dut.core_1.rom_addr_s[15:0]} top.testbench.dut.core_1.rom_addr_s[15] top.testbench.dut.core_1.rom_addr_s[14] top.testbench.dut.core_1.rom_addr_s[13] top.testbench.dut.core_1.rom_addr_s[12] top.testbench.dut.core_1.rom_addr_s[11] top.testbench.dut.core_1.rom_addr_s[10] top.testbench.dut.core_1.rom_addr_s[9] top.testbench.dut.core_1.rom_addr_s[8] top.testbench.dut.core_1.rom_addr_s[7] top.testbench.dut.core_1.rom_addr_s[6] top.testbench.dut.core_1.rom_addr_s[5] top.testbench.dut.core_1.rom_addr_s[4] top.testbench.dut.core_1.rom_addr_s[3] top.testbench.dut.core_1.rom_addr_s[2] top.testbench.dut.core_1.rom_addr_s[1] top.testbench.dut.core_1.rom_addr_s[0]
 #{top.testbench.dut.core_1.rom_do_s[15:0]} top.testbench.dut.core_1.rom_do_s[15] top.testbench.dut.core_1.rom_do_s[14] top.testbench.dut.core_1.rom_do_s[13] top.testbench.dut.core_1.rom_do_s[12] top.testbench.dut.core_1.rom_do_s[11] top.testbench.dut.core_1.rom_do_s[10] top.testbench.dut.core_1.rom_do_s[9] top.testbench.dut.core_1.rom_do_s[8] top.testbench.dut.core_1.rom_do_s[7] top.testbench.dut.core_1.rom_do_s[6] top.testbench.dut.core_1.rom_do_s[5] top.testbench.dut.core_1.rom_do_s[4] top.testbench.dut.core_1.rom_do_s[3] top.testbench.dut.core_1.rom_do_s[2] top.testbench.dut.core_1.rom_do_s[1] top.testbench.dut.core_1.rom_do_s[0]
-@c00029
+@c00028
 #{top.testbench.dut.gpio_pins_s[15:0]} top.testbench.dut.gpio_pins_s[15] top.testbench.dut.gpio_pins_s[14] top.testbench.dut.gpio_pins_s[13] top.testbench.dut.gpio_pins_s[12] top.testbench.dut.gpio_pins_s[11] top.testbench.dut.gpio_pins_s[10] top.testbench.dut.gpio_pins_s[9] top.testbench.dut.gpio_pins_s[8] top.testbench.dut.gpio_pins_s[7] top.testbench.dut.gpio_pins_s[6] top.testbench.dut.gpio_pins_s[5] top.testbench.dut.gpio_pins_s[4] top.testbench.dut.gpio_pins_s[3] top.testbench.dut.gpio_pins_s[2] top.testbench.dut.gpio_pins_s[1] top.testbench.dut.gpio_pins_s[0]
 @28
 top.testbench.dut.gpio_pins_s[15]
@@ -121,7 +170,7 @@ top.testbench.dut.gpio_pins_s[3]
 top.testbench.dut.gpio_pins_s[2]
 top.testbench.dut.gpio_pins_s[1]
 top.testbench.dut.gpio_pins_s[0]
-@1401209
+@1401200
 -group_end
 [pattern_trace] 1
 [pattern_trace] 0
