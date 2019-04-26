@@ -39,10 +39,41 @@ loop_start:
 
 	movil r0, 0x00
 	movih r0, 0x80
+    movil r10, 0x04
+	movih r10, 0x80
 	movih r1, 0x00
 	movil r1, 0x01
 	str r0, r1
 	movil r0, 0x02
 	str r0, r1
 
-	jmpri 0xfff
+    movil r3, 0x00
+    movih r3, 0x00
+    movil r4, 0xff
+    movih r4, 0xff
+    movil r6, 0x00
+    movih r6, 0x00
+    movil r7, 0x03
+    movih r7, 0x00
+    movil r8, 0x01
+    movih r8, 0x00
+    # save pc
+    mov r5, pc
+    add r6, r6, r8
+    cmp r6, r7
+    jmpc ne, r5
+    movil r6, 0x00
+    movih r6, 0x00
+    xor r3, r3, r4
+    # r6 is 0x00 at this point
+    cmp r3, r6
+    movil r9, 0x37
+    movih r9, 0x00
+    jmpc eq, r9
+    str r10, r1
+    jmpc al, r5
+else:
+    str r0, r1
+    jmpc al, r5
+
+	jmpri 0x00

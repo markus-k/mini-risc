@@ -181,12 +181,10 @@ int main(int argc, char **argv) {
             if (strcmp(token, "mov") == 0) {
                 op1 = strtok(NULL, STRTOK_SEP);
                 op2 = strtok(NULL, STRTOK_SEP);
-                op3 = strtok(NULL, STRTOK_SEP);
 
                 program[counter].opcode = OPCODE_MOV;
                 program[counter].dst = parse_reg(op1);
                 program[counter].src1 = parse_reg(op2);
-                program[counter].src2 = parse_reg(op3);
                 counter++;
             } else if (strcmp(token, "movil") == 0) {
                 op1 = strtok(NULL, STRTOK_SEP);
