@@ -11,12 +11,15 @@ architecture bhv of testbench is
   component soc is
     port (
       clk : in std_logic;
-      nres : in std_logic);
+      nres : in std_logic;
+
+      gpio_a : inout std_logic_vector(15 downto 0));
   end component soc;
 
   signal simulation_done : boolean := false;
   signal clk_s : std_logic;
   signal nres_s : std_logic;
+  signal gpio_a_s : std_logic_vector(15 downto 0);
 begin  -- architecture bhv
 
   clkgen : process is
@@ -49,5 +52,7 @@ begin  -- architecture bhv
   dut : soc
     port map (
       clk => clk_s,
-      nres => nres_s);
+      nres => nres_s,
+
+      gpio_a => gpio_a_s);
 end architecture bhv;

@@ -47,7 +47,7 @@ architecture rtl of periph_gpio is
   signal gpio_out_ns : std_logic_vector(15 downto 0);
   signal gpio_out_cs : std_logic_vector(15 downto 0);
 begin
-  gpio: process (gpio_oe_cs, gpio_out_cs, gpio_in_cs) is
+  gpio: process (gpio_oe_cs, gpio_out_cs, gpio_in_cs, gpio_pins_s) is
     variable gpio_in_v : std_logic_vector(15 downto 0);
   begin
     gpio_in_v := gpio_in_cs;

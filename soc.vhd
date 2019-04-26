@@ -5,7 +5,9 @@ use ieee.numeric_std.all;
 entity soc is
   port (
     clk  : in std_logic;
-    nres : in std_logic);
+    nres : in std_logic;
+
+    gpio_a : inout std_logic_vector(15 downto 0));
 end entity soc;
 
 architecture rtl of soc is
@@ -137,4 +139,6 @@ begin
       io_do    => io_do_s,
       io_we    => io_we_s,
       io_addr  => io_addr_s);
+
+  gpio_a <= gpio_pins_s;
 end architecture rtl;
