@@ -139,7 +139,7 @@ architecture rtl of core is
   signal io_we_s : std_logic;
   signal io_addr_s : std_logic_vector(15 downto 0);
 
-  type instr_fsm_type is (FETCH, DECODE, EXECUTE, MEMACCESS);
+  type instr_fsm_type is (DECODE, EXECUTE, MEMACCESS);
 
   constant num_regs : natural := 16;
   constant reg_pc_idx : natural := num_regs - 1;
@@ -153,7 +153,7 @@ architecture rtl of core is
   signal instr_fetch_ns : std_logic_vector(width_msb downto 0);
   signal instr_fetch_cs : std_logic_vector(width_msb downto 0) := (others => '0');
   signal instr_fsm_ns : instr_fsm_type;
-  signal instr_fsm_cs : instr_fsm_type := FETCH;
+  signal instr_fsm_cs : instr_fsm_type := DECODE;
 
   -- memory bus
   signal mem_do_s : std_logic_vector(15 downto 0);
@@ -399,15 +399,13 @@ begin
     rom_addr_s <= reg_bank_cs(reg_pc_idx);
 
     case instr_fsm_v is
-      when FETCH =>
-        instr_fsm_v := DECODE;
       when DECODE =>
         instr_fetch_v := rom_do_s;
         instr_fsm_v := EXECUTE;
       when EXECUTE =>
         instr_fsm_v := MEMACCESS;
       when MEMACCESS =>
-        instr_fsm_v := FETCH;
+        instr_fsm_v := DECODE;
     end case;
 
     instr_fsm_ns <= instr_fsm_v;
@@ -420,7 +418,7 @@ begin
       if nres = '0' then
         reg_bank_cs <= (others => (others => '0'));
         instr_fetch_cs <= (others => '0');
-        instr_fsm_cs <= FETCH;
+        instr_fsm_cs <= DECODE;
 
         mem_di_cs <= (others => '0');
         mem_we_cs <= '0';

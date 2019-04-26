@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use std.textio.all;
 
 entity rom is
   port (
@@ -12,14 +13,32 @@ entity rom is
 end entity rom;
 
 architecture rtl of rom is
-  type rom_type is array (0 to 2**16-1) of std_logic_vector(15 downto 0);
+  constant rom_size : natural := 2**16;
+  type rom_type is array (0 to rom_size-1) of std_logic_vector(15 downto 0);
+
+  impure function rom_init(filename : string) return rom_type is
+    file rom_file : text open read_mode is filename;
+    variable rom_line : line;
+    variable rom_value : bit_vector(15 downto 0);
+    variable temp : rom_type;
+  begin
+    for rom_index in 0 to rom_size-1 loop
+      if not endfile(rom_file) then
+        readline(rom_file, rom_line);
+        read(rom_line, rom_value);
+        temp(rom_index) := to_stdlogicvector(rom_value);
+      end if;
+    end loop;
+    return temp;
+  end function;
+
   constant rom_data : rom_type := (
     ( X"1" & X"d" & X"ff" ), -- movil sp, 0xff
     ( X"2" & X"d" & X"00" ), -- movih sp, 0x00
 
     ( X"1" & X"0" & X"05" ), -- movil r0, 0x05
     ( X"2" & X"0" & X"01" ), -- movih r0, 0x01
-    ( X"1" & X"1" & X"06" ), -- movih r1, 0x06
+    ( X"1" & X"1" & X"06" ), -- movil r1, 0x06
     ( X"1" & X"2" & X"00" ), -- movil r2, 0x00
     ( X"2" & X"2" & X"00" ), -- movih r2, 0x00
 
@@ -42,7 +61,7 @@ architecture rtl of rom is
     ( X"8" & X"2" & X"2" & "0" & "011" ), -- sht r2, r2, l, 3
     ( X"8" & X"2" & X"2" & "1" & "010" ), -- sht r2, r2, r, 2
 
-    ( X"C" & X"1" & X"5" & X"0" ), -- ldr r2, r5
+    ( X"C" & X"1" & X"5" & X"0" ), -- ldr r1, r5
     ( X"F" & X"2" & X"00"), -- pop r2
 
     ( X"1" & X"0" & X"00" ), -- movil r0, 0x00
@@ -50,7 +69,7 @@ architecture rtl of rom is
     ( X"1" & X"1" & X"01" ), -- movih r1, 0x01
     ( X"2" & X"1" & X"00" ), -- movil r1, 0x00
     ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
-    ( X"1" & X"0" & X"02" ), -- movil r0, 0x00
+    ( X"1" & X"0" & X"02" ), -- movil r0, 0x02
     ( X"D" & X"0" & X"1" & X"0" ), -- str r0, r1
 
     ( X"9" & X"fff" ), -- jmp .
