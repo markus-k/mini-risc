@@ -25,6 +25,8 @@ gtkwave waves.ghw waves.gtkw &
 
 The testbench runs a simple program which multiplies two numbers from registers r0 and r1.
 
+The `fpga/` subdirectory contains files for running the CPU on a Spartan 6 Mojo-V3 board.
+
 ## Using the assembler
 
 Sources for the assembler are located in the subdirectory `asm/` and can be compiled using `make`.
